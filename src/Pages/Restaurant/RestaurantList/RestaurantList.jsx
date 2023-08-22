@@ -1,102 +1,27 @@
-import React, { useState, useEffect } from "react";
-import { refreshAccessToken } from "../../../utils/authUtils";
-import axios from "axios";
+import React, { useEffect } from "react";
 import { Button, Row, Col } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { DeleteOutlined, ReadOutlined, EditOutlined } from "@ant-design/icons";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchRestaurants,
+  deleteRestaurant,
+} from "../../../redux/slice/restaurantSlice";
 
 const RestaurantList = () => {
-  const [restaurants, setRestaurants] = useState([]);
-  const userId = localStorage.getItem("user_id");
-
-  const fetchRestaurants = async () => {
-    const accessToken = localStorage.getItem("access_token");
-    let response;
-    try {
-      response = await axios.get(
-        `https://localhost:7242/api/Restaurant/getAll?userId=${userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      setRestaurants(response.data);
-      return response;
-    } catch (error) {
-      response = {
-        data: null,
-        status: 401,
-        statusText: "Unauthorized",
-        headers: {},
-        config: error.config,
-      };
-
-      console.error("Error fetching orders:", response);
-      return response;
-    }
-  };
-  const fetchRestaurantsDelete = async (id) => {
-    const accessToken = localStorage.getItem("access_token");
-    let response;
-    try {
-      response = await axios.delete(
-        `https://localhost:7242/api/Restaurant/delete?restaurantId=${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      await fetchRestaurants();
-      return response;
-    } catch (error) {
-      response = {
-        data: null,
-        status: 401,
-        statusText: "Unauthorized",
-        headers: {},
-        config: error.config,
-      };
-
-      console.error("Error fetching orders:", response);
-      return response;
-    }
-  };
-  const handleDeleteClick = async (id) => {
-    let response = await fetchRestaurantsDelete(id);
-    if (response.status === 401) {
-      const refreshTokenSuccess = await refreshAccessToken();
-      if (refreshTokenSuccess) {
-        await fetchRestaurantsDelete(id);
-      } else {
-        console.error("Failed to refresh access token.");
-      }
-    }
-  };
+  const dispatch = useDispatch();
+  const restaurants = useSelector((state) => state.restaurants.restaurants);
+  const { userId } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const accessToken = localStorage.getItem("access_token");
-        const response = await fetchRestaurants(accessToken);
-        console.log(response);
-        if (response.status === 401) {
-          const refreshTokenSuccess = await refreshAccessToken();
-          if (refreshTokenSuccess) {
-            await fetchRestaurants();
-          } else {
-            console.error("Failed to refresh access token.");
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+      dispatch(fetchRestaurants({ userId }));
     };
 
     fetchData();
-  }, []);
+  }, [dispatch]);
 
+ 
   return (
     <div>
       <h2 style={{ marginBottom: "16px", fontSize: "24px" }}>Рестораны</h2>
@@ -134,7 +59,7 @@ const RestaurantList = () => {
                   <h3 style={{ fontSize: "20px" }}>{restaurant.name}</h3>
                   <p>{restaurant.description}</p>
                   <p>Количество филиалов: {restaurant.branches}</p>
-                  <Link to={`/dashboard/restaurant/${restaurant.id}/branches`}>
+                  <Link to={`${restaurant.id}/branches`}>
                     <Button type="primary" style={{ marginRight: "8px" }}>
                       Филиалы
                     </Button>
@@ -163,7 +88,7 @@ const RestaurantList = () => {
                       background: "red",
                       color: "white",
                     }}
-                    onClick={() => handleDeleteClick(restaurant.id)}
+                    onClick={() => dispatch(deleteRestaurant({restaurantId:restaurant.id}))}
                     icon={<DeleteOutlined />}
                   >
                     Удалить

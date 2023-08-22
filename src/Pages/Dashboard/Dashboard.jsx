@@ -2,7 +2,7 @@ import React from "react";
 import { UserOutlined, BarChartOutlined } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
-import { Link, Routes, Route } from "react-router-dom";
+import { Link, Routes, Route, useParams } from "react-router-dom";
 import RestaurantList from "../Restaurant/RestaurantList/RestaurantList";
 import Profile from "../Profile/Profile.jsx";
 import BadgeIcon from "@mui/icons-material/Badge";
@@ -15,8 +15,8 @@ import BranchEdit from "../Branch/BranchEdit/BranchEdit";
 const { Header, Sider, Content } = Layout;
 const { SubMenu } = Menu;
 const Dashboard = () => {
+  const {userId} = useParams();
   let colorBgContainer = "#DCDCDC";
-
   return (
     <div>
       <Layout>
@@ -46,7 +46,7 @@ const Dashboard = () => {
               title="Ресторан"
             >
               <Menu.Item key="/restaurants">
-                <Link to="restaurants">Рестораны</Link>
+                <Link to={`restaurants`}>Рестораны</Link>
               </Menu.Item>
               <Menu.Item key="/restaurants/branches">
                 <Link to="restaurants/branches">Филиалы</Link>
@@ -87,7 +87,7 @@ const Dashboard = () => {
               />
 
               <Route
-                path="/restaurant/:restaurantId/branches"
+                path="restaurants/:restaurantId/branches"
                 element={<BranchList />}
               />
               

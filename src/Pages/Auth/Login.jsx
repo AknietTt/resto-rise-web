@@ -27,11 +27,10 @@ function Login() {
     if (response.ok) {
       const data = await response.json();
 
-      localStorage.setItem('access_token', data.token);
-      localStorage.setItem('refresh_token', data.refreshToken);
-      localStorage.setItem('user_id', data.id);
+      document.cookie = `access_token=${data.token}; path=/`;
+      document.cookie = `refresh_token=${data.refreshToken}; path=/`;
 
-      window.location.href = `/dashboard`;
+      window.location.href = `/dashboard/${data.id}`;
     } else {
       console.error('Login failed');
     }

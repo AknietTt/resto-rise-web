@@ -92,7 +92,7 @@ const Dashboard = () => {
               />
               
               <Route
-                path="/restaurant/:restaurantId/edit"
+                path="/restaurants/:restaurantId/edit"
                 element={<RestaurantEdit  />}
               />
 

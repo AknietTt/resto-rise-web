@@ -1,11 +1,16 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getAllRestaurantsAsync ,RestaurantsDeleteAsync , createRestaurantAsync} from "../../Requests/restaurantRequests";
+import { getAllRestaurantsAsync ,RestaurantsDeleteAsync , createRestaurantAsync,editRestaurantAsync} from "../../Requests/restaurantRequests";
 
 export const fetchRestaurants = createAsyncThunk(
   "restaurant/fetchRestaurants",
   async function ({ userId }, { rejectWithValue }) {
     try {
-      return await getAllRestaurantsAsync(userId);
+      let response =  await getAllRestaurantsAsync(userId);
+      if(response?.status === 401){
+        return await getAllRestaurantsAsync(userId);
+      }
+      return response;
+
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -16,9 +21,12 @@ export const createRestaurant = createAsyncThunk(
   "restaurant/createRestaurant",
   async function (restaurant, {rejectWithValue,dispatch}){
     try {
-      console.log(restaurant);
+      let response = await createRestaurantAsync(restaurant)
+      if(response?.status === 401){
+        response = await createRestaurantAsync(restaurant);
+      }
       dispatch(addRestaurant(restaurant))
-      createRestaurantAsync(restaurant)
+      return response;
     } catch (error) {
       return rejectWithValue(error.message);
     } 
@@ -29,8 +37,10 @@ export const deleteRestaurant = createAsyncThunk(
   "restaurant/deleteRestaurant" ,
   async function ({restaurantId},{rejectWithValue,dispatch}){
     try {
-      console.log(restaurantId);
-      RestaurantsDeleteAsync(restaurantId)
+      let response = await RestaurantsDeleteAsync(restaurantId)
+      if(response?.status === 401){
+        response = await RestaurantsDeleteAsync(restaurantId)
+      }
       dispatch(removeRestaurant({restaurantId}))
     } catch (error) {
       return rejectWithValue(error.message);
@@ -38,6 +48,20 @@ export const deleteRestaurant = createAsyncThunk(
   }
 );
 
+export const updateRestaurant = createAsyncThunk(
+  "restaurant/editRestaurants",
+  async function (restaurant,{rejectWithValue, dispatch}){
+    try {
+      const response =  await editRestaurantAsync(restaurant)
+      if(response?.status === 401){
+       await  editRestaurantAsync(restaurant)
+      }
+      dispatch(editRestaurant(restaurant))
+    } catch (error) {
+      rejectWithValue(error)
+    }
+  }
+)
 const setError = (state, action) => {
   state.status = "rejected";
   state.error = action.payload;
@@ -61,8 +85,17 @@ const restaurantSlice = createSlice({
     removeRestaurant(state, action) {
       state.restaurants = state.restaurants.filter(restaurant => restaurant.id !== action.payload.restaurantId);
     },
-    getRestaurants(state, action) {},
-    editRestaurants(state, action) {},
+    editRestaurant(state, action) {
+      const updatedRestaurant = action.payload.restaurant;
+
+      const restaurantIndex = state.restaurants.findIndex(
+        (restaurant) => restaurant.id === updatedRestaurant.id
+      );
+    
+      if (restaurantIndex !== -1) {
+        state.restaurants[restaurantIndex] = updatedRestaurant;
+      }
+    }
   },
   extraReducers: {
     [fetchRestaurants.pending]: (state, action) => {
@@ -77,6 +110,6 @@ const restaurantSlice = createSlice({
   },
 });
 
-const { removeRestaurant,addRestaurant} = restaurantSlice.actions;
+const { removeRestaurant,addRestaurant , editRestaurant} = restaurantSlice.actions;
 
 export default restaurantSlice.reducer;

@@ -72,7 +72,7 @@ const RestaurantList = () => {
                     Меню
                   </Button>
 
-                  <Link to={`/dashboard/restaurant/${restaurant.id}/edit`}>
+                  <Link to={`${restaurant.id}/edit`}>
                     <Button
                       type="dashed"
                       icon={<EditOutlined />}

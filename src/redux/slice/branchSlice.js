@@ -11,3 +11,6 @@ const branchSlice = createSlice({
     
   },
 });
+
+
+export default branchSlice.reducer;

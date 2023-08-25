@@ -1,82 +1,81 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { refreshAccessToken } from "../../../utils/authUtils";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button, Input } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchBranches, updateBranch } from "../../../redux/slice/branchSlice";
 
 function BranchEdit() {
-  const { branchId } = useParams();
-  const [branch, setBranch] = useState();
+  const { branchId, restaurantId } = useParams();
+  const branch = useSelector((state) =>
+    state.branches.branches.find((branch) => branch.id === +branchId)
+  );
 
-  const [address, setAddress] = useState();
-  const [city, setCity] = useState();
-  let isFormChanged = true;
+  const dispatch = useDispatch();
+  const [address, setAddress] = useState(branch ? branch.address : "");
+  const [city, setCity] = useState(branch ? branch.city : "");
+  const [isModified, setIsModified] = useState(false);
+  const navigate = useNavigate();
 
-  const fetchBranch = async () => {
-    let response;
-    const accessToken = localStorage.getItem("access_token");
+  useEffect(() => {
+    if (branch === undefined || branch === null) {
+      dispatch(fetchBranches(restaurantId));
+    } else {
+      setAddress(branch.address);
+      setCity(branch.city);
+    }
+  }, [branch, dispatch, restaurantId]);
 
-    try {
-      response = await axios.get(
-        "https://localhost:7242/api/Branch/get/" + branchId,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      setAddress(response.data.address);
-      setCity(response.data.city);
+  const handleInputChange = (inputName, inputValue) => {
+    setIsModified(true);
 
-      setBranch(response.data);
-      return response;
-    } catch (error) {
-      return {
-        status: 401,
-      };
+    switch (inputName) {
+      case "address":
+        setAddress(inputValue);
+        break;
+      case "city":
+        setCity(inputValue);
+        break;
+      default:
+        break;
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      let response = await fetchBranch();
-
-      if (response.status === 401) {
-        const refreshTokenSuccess = await refreshAccessToken();
-        if (refreshTokenSuccess) {
-          await fetchBranch();
-        }
-      }
+  const handleUpdateClick = () => {
+    const updatedBranch = {
+      ...branch,
+      address: address,
+      city: city,
     };
-    fetchData();
-  }, []);
-  const handleEditClick = () =>{
+    dispatch(updateBranch(updatedBranch));
+    navigate(-1);
+  };
 
-  }
   return (
     <div>
       {branch === undefined ? (
-        <p>Пусто</p>
+        <p>Ошибка</p>
       ) : (
         <div>
           <div>
             <p style={{ margin: "10px 0px 0px 0px" }}>Адрес</p>
             <Input
               type="text"
-              value={ branch.address}
+              value={address}
+              onChange={(e) => handleInputChange("address", e.target.value)}
               style={{ margin: "0px 0px 10px 0px" }}
             />
             <p style={{ margin: "10px 0px 0px 0px" }}>Город</p>
             <Input
               type="text"
-              value={branch.city}
+              value={city}
+              onChange={(e) => handleInputChange("city", e.target.value)}
               style={{ margin: "0px 0px 10px 0px" }}
             />
           </div>
           <Button
             type="primary"
-            onClick={() => handleEditClick(branch.id)}
-            disabled={!isFormChanged}
+            onClick={handleUpdateClick}
+            disabled={!isModified}
           >
             Изменить
           </Button>

@@ -5,6 +5,6 @@ import branchSlice from "../slice/branchSlice";
 export const store = configureStore({
     reducer:{
         restaurants: restaurantSlice,
-        branch: branchSlice
+        branches: branchSlice
     }
 })

@@ -3,13 +3,16 @@ import { Form, Input, Button, Select } from "antd";
 import axios from "axios";
 import { refreshAccessToken } from "../../../utils/authUtils";
 import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { createBranch } from "../../../redux/slice/branchSlice";
 const { Option } = Select;
 
 function BranchCreate() {
   const [cityOptions, setCityOptions] = useState([]);
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const { restaurantId } = useParams();
+  const { restaurantId , userId} = useParams();
+  const dispatch = useDispatch()
 
   useEffect(() => {
     axios
@@ -22,59 +25,10 @@ function BranchCreate() {
       });
   }, []);
 
-  const createBranch = async (values) => {
-    let response;
-    const accessToken = localStorage.getItem("access_token");
-    try {
-      response = await axios.post(
-        "https://localhost:7242/api/Branch/create",
-        {
-          ...values
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      return response;
-    } catch (error) {
-      response = {
-        data: null,
-        status: 401,
-        statusText: "Unauthorized",
-        headers: {},
-        config: error.config,
-      };
-
-      return response;
-    }
-  };
 
   const onFinish = async (values) => {
-    const requestData = {
-      address: values.address,
-      cityId: values.cityId,
-      restaurantId: restaurantId,
-    };
-    
-    let response = await createBranch(requestData);
-
-    if(response.status === 200 || response.status === 204){
-        navigate(`/dashboard/restaurants/${restaurantId}/branches`)
-    }
-    if (response.status === 401) {
-        const refreshTokenSuccess = await refreshAccessToken();
-  
-        if (refreshTokenSuccess) {
-          response =  await createBranch(requestData);
-          if(response.status === 200){
-             navigate(`/dashboard/restaurants/${restaurantId}/branches`)
-          }
-        } else {
-          console.error("Failed to refresh access token.");
-        }
-      }
+    dispatch(createBranch({...values , restaurantId} ))
+    navigate(`/dashboard/${userId}/restaurants/${restaurantId}/branches`)
   };
   return (
     <div>

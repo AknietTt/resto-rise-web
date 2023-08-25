@@ -107,6 +107,9 @@ const restaurantSlice = createSlice({
       state.restaurants = action.payload;
     },
     [fetchRestaurants.rejected]: setError,
+    [createRestaurant.rejected]:setError,
+    [deleteRestaurant.rejected]:setError,
+    [updateRestaurant.rejected]:setError
   },
 });
 

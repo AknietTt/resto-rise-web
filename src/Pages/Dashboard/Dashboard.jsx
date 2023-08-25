@@ -97,7 +97,7 @@ const Dashboard = () => {
               />
 
               <Route
-                path="/restaurants/:restaurantId/branch-create"
+                path="restaurants/:restaurantId/branches/branch-create"
                 element={<BranchCreate />}
               />
 

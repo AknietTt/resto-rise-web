@@ -1,96 +1,105 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { registerUserAsync } from "../../Requests/authRequests";
+import { Button, Input } from "antd";
 
 function Register() {
-  const initialFormData = {
-    firstName: '',
-    middleName: '',
-    lastName: '',
-    email: '',
-    userName: '',
-    password: '',
-    repeatPassword: '',
-  };
   const navigate = useNavigate();
-  const [formData, setFormData] = useState(initialFormData);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    middleName: "",
+    lastName: "",
+    email: "",
+    userName: "",
+    password: "",
+    repeatPassword: "",
+  });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  const isFormValid = Object.values(formData).every((value) => value !== "");
+
+  const handleInputChange = (fieldName, value) => {
+    setFormData({ ...formData, [fieldName]: value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    fetch('https://localhost:7242/api/Account/register-owner', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          navigate('/login'); 
-        } else {
-          console.log('Registration failed:', response.status);
-        }
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
+  const handleRegisterClick =async ()  => {
+    if (isFormValid) {
+      let response = await  registerUserAsync(formData);
+      if(response?.status === 200){
+        navigate("/");
+      }
+    }
   };
-
-  const isFormValid =
-    formData.firstName &&
-    formData.middleName &&
-    formData.lastName &&
-    formData.email &&
-    formData.userName &&
-    formData.password &&
-    formData.repeatPassword === formData.password;
-
   return (
-    <div>
-      <h2>Register</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>First Name:</label>
-          <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} />
-        </div>
-        <div>
-          <label>Middle Name:</label>
-          <input type="text" name="middleName" value={formData.middleName} onChange={handleChange} />
-        </div>
-        <div>
-          <label>Last Name:</label>
-          <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} />
-        </div>
-        <div>
-          <label>Email:</label>
-          <input type="email" name="email" value={formData.email} onChange={handleChange} />
-        </div>
-        <div>
-          <label>User Name:</label>
-          <input type="text" name="userName" value={formData.userName} onChange={handleChange} />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input type="password" name="password" value={formData.password} onChange={handleChange} />
-        </div>
-        <div>
-          <label>Repeat Password:</label>
-          <input
-            type="password"
-            name="repeatPassword"
-            value={formData.repeatPassword}
-            onChange={handleChange}
-          />
-        </div>
-        <button type="submit" disabled={!isFormValid}>
-          Register
-        </button>
-      </form>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: 400,
+          width: "100%",
+          padding: 20,
+          boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+          borderRadius: 8,
+        }}
+      >
+        <Input
+          placeholder="Имя"
+          value={formData.firstName}
+          onChange={(e) => handleInputChange("firstName", e.target.value)}
+          style={{ marginBottom: 10 }}
+        />
+        <Input
+          placeholder="Фамилия"
+          value={formData.lastName}
+          onChange={(e) => handleInputChange("lastName", e.target.value)}
+          style={{ marginBottom: 10 }}
+        />
+        <Input
+          placeholder="Отчество"
+          value={formData.middleName}
+          onChange={(e) => handleInputChange("middleName", e.target.value)}
+          style={{ marginBottom: 10 }}
+        />
+        <Input
+          placeholder="Email"
+          value={formData.email}
+          onChange={(e) => handleInputChange("email", e.target.value)}
+          style={{ marginBottom: 10 }}
+        />
+        <Input
+          placeholder="Имя пользователя"
+          value={formData.userName}
+          onChange={(e) => handleInputChange("userName", e.target.value)}
+          style={{ marginBottom: 10 }}
+        />
+        <Input
+          type="password"
+          placeholder="Пароль"
+          value={formData.password}
+          onChange={(e) => handleInputChange("password", e.target.value)}
+          style={{ marginBottom: 10 }}
+        />
+        <Input
+          type="password"
+          placeholder="Повторите пароль"
+          value={formData.repeatPassword}
+          onChange={(e) => handleInputChange("repeatPassword", e.target.value)}
+          style={{ marginBottom: 10 }}
+        />
+        <Button
+          type="primary"
+          onClick={handleRegisterClick}
+          disabled={!isFormValid}
+          style={{ width: "100%" }}
+        >
+          Зарегистрироваться
+        </Button>
+      </div>
     </div>
   );
 }

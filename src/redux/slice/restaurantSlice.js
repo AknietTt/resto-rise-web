@@ -35,13 +35,13 @@ export const createRestaurant = createAsyncThunk(
 
 export const deleteRestaurant = createAsyncThunk(
   "restaurant/deleteRestaurant" ,
-  async function ({restaurantId},{rejectWithValue,dispatch}){
+  async function ({restaurantId , userId},{rejectWithValue,dispatch}){
     try {
       let response = await RestaurantsDeleteAsync(restaurantId)
       if(response?.status === 401){
         response = await RestaurantsDeleteAsync(restaurantId)
       }
-      dispatch(removeRestaurant({restaurantId}))
+      dispatch(fetchRestaurants(userId))
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -71,7 +71,7 @@ const restaurantSlice = createSlice({
   name: "restaurant",
   initialState: {
     restaurants: [],
-    status: null,
+    status: "idle",
     error: null,
   },
   reducers: {
@@ -113,6 +113,6 @@ const restaurantSlice = createSlice({
   },
 });
 
-const { removeRestaurant,addRestaurant , editRestaurant} = restaurantSlice.actions;
+const { addRestaurant , editRestaurant} = restaurantSlice.actions;
 
 export default restaurantSlice.reducer;

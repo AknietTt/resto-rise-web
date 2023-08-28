@@ -70,7 +70,7 @@ const branchSlice = createSlice({
   name: "branch",
   initialState: {
     branches: [],
-    status: null,
+    status: "idle",
     error: null,
   },
   reducers: {

@@ -1,5 +1,4 @@
 export async function refreshAccessToken() {
-  let refresh_token = getCookieValue("refresh_token");
   let access_token = getCookieValue("access_token");
   try {
     const response = await fetch(
@@ -10,8 +9,7 @@ export async function refreshAccessToken() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          accessToken: access_token,
-          refreshToken: refresh_token,
+          accessToken: access_token
         }),
       }
     );

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Button, Row, Col } from "antd";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { DeleteOutlined, ReadOutlined, EditOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -11,11 +11,11 @@ import {
 const RestaurantList = () => {
   const dispatch = useDispatch();
   const restaurants = useSelector((state) => state.restaurants.restaurants);
-  const { userId } = useParams();
-
+  
+  const user = useSelector((state) => state.user.user);
   useEffect(() => {
     const fetchData = async () => {
-      dispatch(fetchRestaurants({ userId }));
+      dispatch(fetchRestaurants({ userId: user.id }));
     };
 
     fetchData();
@@ -88,7 +88,7 @@ const RestaurantList = () => {
                       background: "red",
                       color: "white",
                     }}
-                    onClick={() => dispatch(deleteRestaurant({restaurantId:restaurant.id}))}
+                    onClick={() => dispatch(deleteRestaurant({restaurantId:restaurant.id , userId:user.id}))}
                     icon={<DeleteOutlined />}
                   >
                     Удалить

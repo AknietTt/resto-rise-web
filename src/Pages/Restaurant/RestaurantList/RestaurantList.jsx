@@ -12,7 +12,7 @@ const RestaurantList = () => {
   const dispatch = useDispatch();
   const restaurants = useSelector((state) => state.restaurants.restaurants);
   
-  const user = useSelector((state) => state.user.user);
+  const user = useSelector((state)=>state.user.user)
   useEffect(() => {
     const fetchData = async () => {
       dispatch(fetchRestaurants({ userId: user.id }));
@@ -59,20 +59,22 @@ const RestaurantList = () => {
                   <h3 style={{ fontSize: "20px" }}>{restaurant.name}</h3>
                   <p>{restaurant.description}</p>
                   <p>Количество филиалов: {restaurant.branches}</p>
-                  <Link to={`${restaurant.id}/branches`}>
+                  <Link to={`/dashboard/restaurant/${restaurant.id}/branches`}>
                     <Button type="primary" style={{ marginRight: "8px" }}>
                       Филиалы
                     </Button>
                   </Link>
+                  <Link to={`/dashboard/restaurant/${restaurant.id}/menu`}>
                   <Button
-                    type="dashed"
-                    icon={<ReadOutlined />}
-                    style={{ marginTop: "8px" }}
-                  >
+                     type="dashed"
+                     icon={<ReadOutlined />}
+                     style={{ marginTop: "8px" }}
+                     >
                     Меню
                   </Button>
+                    </Link>
 
-                  <Link to={`${restaurant.id}/edit`}>
+                  <Link to={`/dashboard/restaurant/${restaurant.id}/edit`}>
                     <Button
                       type="dashed"
                       icon={<EditOutlined />}

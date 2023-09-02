@@ -11,6 +11,7 @@ export const loginUser = createAsyncThunk(
     } catch (error) {
       rejectWithValue(error);
     }
+    fetchMe()
     return response;
   }
 );
@@ -34,26 +35,17 @@ const setError = (state, action) => {
   state.status = "rejected";
   state.error = action.payload;
 };
-
+const initialState = {
+  user: null,
+  status: "idle",
+  error: null,
+}
 const authSlice = createSlice({
   name: "auth",
-  initialState: {
-    user: null,
-    status: "idle",
-    error: null,
-  },
+  initialState,
   reducers: {},
   extraReducers: {
-    [loginUser.pending]: (state, action) => {
-      state.status = "pending";
-      state.error = null;
-    },
-    [loginUser.fulfilled]: (state, action) => {
-      state.status = "pending";
-      state.error = null;
-      state.user = action.payload;
-    },
-
+   
     [fetchMe.pending]: (state, action) => {
       state.status = "pending";
       state.error = null;

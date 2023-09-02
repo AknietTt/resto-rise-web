@@ -2,7 +2,7 @@ import React from "react";
 import { UserOutlined, BarChartOutlined } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
-import { Link, Routes, Route, useParams } from "react-router-dom";
+import { Link, Routes, Route } from "react-router-dom";
 import RestaurantList from "../Restaurant/RestaurantList/RestaurantList";
 import Profile from "../Profile/Profile.jsx";
 import BadgeIcon from "@mui/icons-material/Badge";
@@ -11,11 +11,11 @@ import BranchList from "../Branch/BranchList/BranchList";
 import BranchCreate from "../Branch/BranchCreate/BranchCreate";
 import RestaurantEdit from "../Restaurant/RestaurantEdit/RestaurantEdit";
 import BranchEdit from "../Branch/BranchEdit/BranchEdit";
+import RestaurantMenu from "../Menu/RestaurantMenu";
 
 const { Header, Sider, Content } = Layout;
 const { SubMenu } = Menu;
 const Dashboard = () => {
-  const {userId} = useParams();
   let colorBgContainer = "#DCDCDC";
   return (
     <div>
@@ -87,23 +87,28 @@ const Dashboard = () => {
               />
 
               <Route
-                path="restaurants/:restaurantId/branches"
+                path="restaurant/:restaurantId/branches"
                 element={<BranchList />}
-              />
-              
-              <Route
-                path="/restaurants/:restaurantId/edit"
-                element={<RestaurantEdit  />}
               />
 
               <Route
-                path="restaurants/:restaurantId/branches/branch-create"
+                path="/restaurant/:restaurantId/edit"
+                element={<RestaurantEdit />}
+              />
+
+              <Route
+                path="restaurant/:restaurantId/branches/branch-create"
                 element={<BranchCreate />}
               />
 
-              <Route 
-                path="/restaurants/:restaurantId/branches/:branchId/edit"
-                element={<BranchEdit/>}
+              <Route
+                path="/restaurant/:restaurantId/branch/:branchId/edit"
+                element={<BranchEdit />}
+              />
+
+              <Route
+                path="/restaurant/:restaurantId/menu"
+                element={<RestaurantMenu />}
               />
 
               <Route path="/*" element={<Profile />} />

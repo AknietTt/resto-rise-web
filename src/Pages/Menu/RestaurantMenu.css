@@ -1,0 +1,57 @@
+.custom-modal {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .custom-modal .ant-modal-header {
+    color: #fff;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+  
+  .custom-modal .ant-modal-content {
+    padding: 24px;
+  }
+  
+  .custom-modal .ant-modal-footer {
+    display: none; 
+  }
+  
+  .custom-modal .ant-upload {
+    margin-top: 16px;
+  }
+  
+  .custom-modal .ant-upload-list {
+    display: none; 
+  }
+  
+  .custom-modal .ant-upload-select {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    border: 2px dashed #1890ff;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color 0.3s;
+  }
+  
+  .custom-modal .ant-upload-select:hover {
+    border-color: #40a9ff;
+  }
+  
+  .custom-modal .ant-upload-select i {
+    font-size: 24px;
+    color: #1890ff;
+  }
+  
+  .custom-modal .ant-upload-select-text {
+    margin-top: 8px;
+    font-size: 16px;
+    color: #666;
+  }
+  
+  .custom-modal .ant-upload-list-item-actions {
+    display: none; 
+  }

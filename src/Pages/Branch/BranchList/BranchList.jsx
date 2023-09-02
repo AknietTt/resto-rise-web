@@ -47,7 +47,7 @@ function BranchList() {
                     <Col span={8} style={{ textAlign: "right" }}>
                       <Button type="primary" style={{ marginRight: "8px" }}>
                         <Link
-                          to={`${branch.id}/edit`}
+                          to={`/dashboard/restaurant/40/branch/${branch.id}/edit`}
                         >
                           <EditOutlined /> Изменить
                         </Link>

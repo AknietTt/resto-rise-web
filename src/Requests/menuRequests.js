@@ -2,42 +2,14 @@ import axios from "axios";
 import { host } from "../utils/constants";
 import { getCookieValue, refreshAccessToken } from "../utils/authUtils";
 
-export const getAllBranchesAsync = async (restaurantId) => {
-  let response;
-  try {
-    const accessToken = getCookieValue("access_token");
-    response = await axios.get(
-      host + `api/Branch/restaurant/${restaurantId}/branches`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-
-    return response.data;
-  } catch (error) {
-    if (error.response && error.response.status === 401) {
-      const refreshTokenSuccess = await refreshAccessToken();
-      if (refreshTokenSuccess) {
-        return error.response;
-      }
-    }
-    throw error;
-  }
-};
-
-export const createBranchAsync = async (branch) => {
-  const restaurantId = +branch.restaurantId;
-
+export const createMenuAsync = async (menu) => {
   let response;
   try {
     const accessToken = getCookieValue("access_token");
     response = await axios.post(
-      host + `api/Branch/create`,
+      host + `api/Menu/create`,
       {
-        ...branch,
-        restaurantId,
+        menu,
       },
       {
         headers: {
@@ -57,16 +29,16 @@ export const createBranchAsync = async (branch) => {
   }
 };
 
-export const deleteBranchAsync = async (branchId) => {
+export const getMenuAsunc = async (restaurantId) => {
   let response;
+  const accessToken = getCookieValue("access_token");
   try {
-    const accessToken = getCookieValue("access_token");
-    response = await axios.delete(host + `api/Branch/delete/` + branchId, {
+    response = await axios.get(host + `api/Menu/get/` + restaurantId, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-
+    console.log(response.data);
     return response.data;
   } catch (error) {
     if (error.response && error.response.status === 401) {
@@ -79,19 +51,69 @@ export const deleteBranchAsync = async (branchId) => {
   }
 };
 
-export const updateBranchAsync = async (branch) => {
-  let response;
+export const deleteFoodAsync = async (foodId ) =>{
+  let response ;
   try {
     const accessToken = getCookieValue("access_token");
-    response = await axios.put(
-      host + `api/Branch/update/` + branch.id,
-      {
-        ...branch,
-      },
+    response = await axios.delete(
+      host+`api/Food/delete/`+foodId,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
+      }
+    ) 
+    return response.data; 
+  } catch (error) {
+    if (error.response && error.response.status === 401) {
+      const refreshTokenSuccess = await refreshAccessToken();
+      if (refreshTokenSuccess) {
+        return error.response;
+      }
+    }
+    throw error;
+  }
+}
+
+export const addFoodAsync = async (food) =>{
+  try {
+    const accessToken = getCookieValue("access_token");
+    let response = await axios.post(
+      host+`api/Food/add`,
+      {
+        ...food
+      },
+      {
+        headers:{
+          Authorization:`Bearer ${accessToken}`
+        }
+      }
+    )
+
+    return response.data
+  } catch (error) {
+    if (error.response && error.response.status === 401) {
+      const refreshTokenSuccess = await refreshAccessToken();
+      if (refreshTokenSuccess) {
+        return error.response;
+      }
+    }
+    throw error;
+  }
+}
+
+export const updateFoodAsync = async (food)=>{
+  try {
+    const accessToken = getCookieValue("access_token");
+    let response  = await axios.put(
+      host+`api/Food/update/`+food.id,
+      {
+        ...food
+      },
+      {
+        headers:{
+          Authorization:`Bearer ${accessToken}`
+        }
       }
     );
     return response.data;
@@ -104,4 +126,5 @@ export const updateBranchAsync = async (branch) => {
     }
     throw error;
   }
-};
+}
+

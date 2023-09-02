@@ -66,13 +66,14 @@ const setError = (state, action) => {
   state.error = action.payload;
 };
 
+const initialState  = {
+  branches: [],
+  status: "idle",
+  error: null,
+}
 const branchSlice = createSlice({
   name: "branch",
-  initialState: {
-    branches: [],
-    status: "idle",
-    error: null,
-  },
+  initialState,
   reducers: {
     addBranch(state, action){
       state.branches.push(action.payload.branch);

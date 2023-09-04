@@ -4,6 +4,7 @@ import { Card, List } from 'antd';
 
 function Profile() {
   const user = useSelector((state) => state.user.user);
+  
 
   return (
     <div style={{ padding: '20px' }}>

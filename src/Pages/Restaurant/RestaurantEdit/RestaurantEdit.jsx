@@ -60,7 +60,7 @@ function RestaurantEdit() {
       image: image,
     };
     dispatch(updateRestaurant(updatedRestaurant));
-    navigate(`/dashboard/${userId}/restaurants`)
+    navigate(`/dashboard/restaurants`)
   };
 
   return (

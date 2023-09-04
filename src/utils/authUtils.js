@@ -51,3 +51,4 @@ export function setCookie(name, value, daysToExpire) {
     (daysToExpire ? `; expires=${expirationDate.toUTCString()}` : "");
   document.cookie = `${name}=${cookieValue}; path=/`;
 }
+

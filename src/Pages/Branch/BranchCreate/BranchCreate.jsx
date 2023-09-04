@@ -27,7 +27,7 @@ function BranchCreate() {
 
   const onFinish = async (values) => {
     dispatch(createBranch({...values , restaurantId} ))
-    navigate(`/dashboard/${userId}/restaurants/${restaurantId}/branches`)
+    navigate(`/dashboard/restaurant/${restaurantId}/branches`)
   };
   return (
     <div>

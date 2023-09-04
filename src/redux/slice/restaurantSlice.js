@@ -46,7 +46,7 @@ export const deleteRestaurant = createAsyncThunk(
       if (response?.status === 401) {
         response = await RestaurantsDeleteAsync(restaurantId);
       }
-      dispatch(fetchRestaurants(userId));
+      dispatch(fetchRestaurants({userId}));
     } catch (error) {
       return rejectWithValue(error.message);
     }

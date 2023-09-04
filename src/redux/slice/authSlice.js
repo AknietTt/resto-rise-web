@@ -5,13 +5,11 @@ export const loginUser = createAsyncThunk(
   "auth/createUser",
   async function (user, { rejectWithValue }) {
     let response;
-    console.log(user);
     try {
       response = await loginUserAsync(user);
     } catch (error) {
-      rejectWithValue(error);
+      return rejectWithValue(error.message);
     }
-    fetchMe()
     return response;
   }
 );
@@ -27,14 +25,17 @@ export const fetchMe = createAsyncThunk(
       }
       return response;
     } catch (error) {
-      rejectWithValue(error);
+      return rejectWithValue(error.message);
     }
   }
 );
+
 const setError = (state, action) => {
   state.status = "rejected";
   state.error = action.payload;
 };
+
+
 const initialState = {
   user: null,
   status: "idle",

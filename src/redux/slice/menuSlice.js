@@ -70,11 +70,10 @@ export const deleteFood = createAsyncThunk(
       if(response?.status === 401 ){
         response = await deleteFoodAsync(foodId)
       }
-      console.log(foodId);
-     dispatch(remove(foodId))
+      dispatch(remove(foodId))
       return response;
     } catch (error) {
-      rejectWithValue(error)
+      return rejectWithValue(error)
     }
   }
 )
@@ -111,10 +110,9 @@ const menuSlice = createSlice({
       }
     },
     remove(state, action) {
-      console.log(action.payload.foodId);
-
+      console.log(action.payload);
       state.menu = state.menu.filter(
-        (food) => food.id !== action.payload.foodId
+        (food) => food.id !== action.payload
       );
     }
   },

@@ -12,6 +12,7 @@ import BranchCreate from "../../Pages/Branch/BranchCreate/BranchCreate";
 import RestaurantEdit from "../../Pages/Restaurant/RestaurantEdit/RestaurantEdit";
 import BranchEdit from "../../Pages/Branch/BranchEdit/BranchEdit";
 import RestaurantMenu from "../../Pages/Menu/RestaurantMenu";
+import Order from "../../Pages/Order/Order";
 
 const { Header, Sider, Content } = Layout;
 const { SubMenu } = Menu;
@@ -56,6 +57,10 @@ const Dashboard = () => {
             <Menu.Item key={"/employee"} icon={<BadgeIcon />}>
               <Link to="employee">Работники</Link>
             </Menu.Item>
+
+            <Menu.Item key={"/orders"} icon={<BadgeIcon />}>
+              <Link to="orders">Заказы</Link>
+            </Menu.Item>
           </Menu>
         </Sider>
         <Layout
@@ -87,7 +92,7 @@ const Dashboard = () => {
               />
 
               <Route
-                path="restaurant/:restaurantId/branches"
+                path="/restaurant/:restaurantId/branches"
                 element={<BranchList />}
               />
 
@@ -109,6 +114,11 @@ const Dashboard = () => {
               <Route
                 path="/restaurant/:restaurantId/menu"
                 element={<RestaurantMenu />}
+              />
+
+              <Route
+                path="/orders"
+                element={<Order/>}
               />
 
               <Route path="/*" element={<Profile />} />

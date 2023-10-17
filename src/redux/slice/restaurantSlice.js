@@ -63,7 +63,7 @@ export const updateRestaurant = createAsyncThunk(
       }
       dispatch(editRestaurant(restaurant));
     } catch (error) {
-      rejectWithValue(error);
+      return rejectWithValue(error.message);
     }
   }
 );

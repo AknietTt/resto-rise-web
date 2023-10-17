@@ -54,7 +54,7 @@ function BranchList() {
                       </Button>
                       <Button
                         style={{ background: "red", color: "white" }}
-                        onClick={() => dispatch(deleteBranch(branch.id))}
+                        onClick={() => dispatch(deleteBranch({branchId: branch.id, restaurantId }))}
                       >
                         <DeleteOutlined /> Удалить
                       </Button>

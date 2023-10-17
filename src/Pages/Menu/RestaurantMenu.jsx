@@ -66,7 +66,13 @@ function RestaurantMenu() {
   };
 
   const closeEditModal = () => {
-    setFormData(null);
+    setFormData({
+      name: "",
+      description: "",
+      category: "",
+      image: "",
+      price: "",
+    })
     setIsEditModalVisible(false);
   };
 
@@ -113,7 +119,7 @@ function RestaurantMenu() {
       restaurantId: +restaurantId,
     };
 
-    dispatch(addFood(newMenuItem));
+    dispatch(addFood({food:newMenuItem, restaurantId: +restaurantId}));
 
     closeModal();
   };

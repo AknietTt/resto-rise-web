@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { createBranchAsync, deleteBranchAsync, getAllBranchesAsync, updateBranchAsync } from "../../Requests/branchRequests";
+import { useSelector } from 'react-redux';
 
 
 export const fetchBranches = createAsyncThunk(
@@ -34,15 +35,16 @@ export const createBranch = createAsyncThunk(
 
 export const deleteBranch = createAsyncThunk (
   "branch/deleteBranch",
-  async function (branchId , {rejectWithValue, dispatch}){
+  async function ({branchId , restaurantId}, {rejectWithValue, dispatch}){
     try {
       let response = await deleteBranchAsync(branchId);
       if(response?.status === 401){
         response = await deleteBranchAsync(branchId);
       }
-      dispatch(removeBranch({branchId}))
+
+      dispatch(fetchBranches(restaurantId))
     } catch (error) {
-      rejectWithValue(error)
+      return rejectWithValue(error.message);
     }
   }
 )
@@ -57,7 +59,7 @@ export const updateBranch = createAsyncThunk (
       }
       dispatch(editBranch(branch))
     } catch (error) {
-      rejectWithValue(error)
+      return rejectWithValue(error.message);
     }
   }
 )

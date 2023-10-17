@@ -1,6 +1,7 @@
 import axios from "axios";
 import { host } from "../utils/constants";
-import { getCookieValue, refreshAccessToken } from "../utils/authUtils";
+import { getCookieValue } from "../utils/authUtils";
+import { checkError } from "./constants";
 
 export const createMenuAsync = async (menu) => {
   let response;
@@ -19,13 +20,7 @@ export const createMenuAsync = async (menu) => {
     );
     return response.data;
   } catch (error) {
-    if (error.response && error.response.status === 401) {
-      const refreshTokenSuccess = await refreshAccessToken();
-      if (refreshTokenSuccess) {
-        return error.response;
-      }
-    }
-    throw error;
+    return checkError(error);
   }
 };
 
@@ -41,13 +36,7 @@ export const getMenuAsunc = async (restaurantId) => {
     console.log(response.data);
     return response.data;
   } catch (error) {
-    if (error.response && error.response.status === 401) {
-      const refreshTokenSuccess = await refreshAccessToken();
-      if (refreshTokenSuccess) {
-        return error.response;
-      }
-    }
-    throw error;
+    return checkError(error);
   }
 };
 
@@ -65,13 +54,7 @@ export const deleteFoodAsync = async (foodId ) =>{
     ) 
     return response.data; 
   } catch (error) {
-    if (error.response && error.response.status === 401) {
-      const refreshTokenSuccess = await refreshAccessToken();
-      if (refreshTokenSuccess) {
-        return error.response;
-      }
-    }
-    throw error;
+    return checkError(error);
   }
 }
 
@@ -92,13 +75,7 @@ export const addFoodAsync = async (food) =>{
 
     return response.data
   } catch (error) {
-    if (error.response && error.response.status === 401) {
-      const refreshTokenSuccess = await refreshAccessToken();
-      if (refreshTokenSuccess) {
-        return error.response;
-      }
-    }
-    throw error;
+    return checkError(error);
   }
 }
 
@@ -118,13 +95,7 @@ export const updateFoodAsync = async (food)=>{
     );
     return response.data;
   } catch (error) {
-    if (error.response && error.response.status === 401) {
-      const refreshTokenSuccess = await refreshAccessToken();
-      if (refreshTokenSuccess) {
-        return error.response;
-      }
-    }
-    throw error;
+    return checkError(error);
   }
 }
 

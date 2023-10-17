@@ -1,6 +1,7 @@
 import axios from "axios";
 import { host } from "../utils/constants";
 import { getCookieValue, refreshAccessToken } from "../utils/authUtils";
+import { checkError } from "./constants";
 
 export const getAllBranchesAsync = async (restaurantId) => {
   let response;
@@ -17,13 +18,7 @@ export const getAllBranchesAsync = async (restaurantId) => {
 
     return response.data;
   } catch (error) {
-    if (error.response && error.response.status === 401) {
-      const refreshTokenSuccess = await refreshAccessToken();
-      if (refreshTokenSuccess) {
-        return error.response;
-      }
-    }
-    throw error;
+    return checkError(error);
   }
 };
 
@@ -47,13 +42,7 @@ export const createBranchAsync = async (branch) => {
     );
     return response.data;
   } catch (error) {
-    if (error.response && error.response.status === 401) {
-      const refreshTokenSuccess = await refreshAccessToken();
-      if (refreshTokenSuccess) {
-        return error.response;
-      }
-    }
-    throw error;
+    return checkError(error);
   }
 };
 
@@ -69,13 +58,7 @@ export const deleteBranchAsync = async (branchId) => {
 
     return response.data;
   } catch (error) {
-    if (error.response && error.response.status === 401) {
-      const refreshTokenSuccess = await refreshAccessToken();
-      if (refreshTokenSuccess) {
-        return error.response;
-      }
-    }
-    throw error;
+    return checkError(error);
   }
 };
 
@@ -96,12 +79,6 @@ export const updateBranchAsync = async (branch) => {
     );
     return response.data;
   } catch (error) {
-    if (error.response && error.response.status === 401) {
-      const refreshTokenSuccess = await refreshAccessToken();
-      if (refreshTokenSuccess) {
-        return error.response;
-      }
-    }
-    throw error;
+    return checkError(error);
   }
 };

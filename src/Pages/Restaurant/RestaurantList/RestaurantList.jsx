@@ -14,6 +14,7 @@ const RestaurantList = () => {
   
   const user = useSelector((state)=>state.user.user)
   useEffect(() => {
+    
     console.log(user);
     const fetchData = async () => {
       dispatch(fetchRestaurants({ userId: user.id }));

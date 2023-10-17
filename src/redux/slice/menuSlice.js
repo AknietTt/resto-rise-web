@@ -11,7 +11,7 @@ export const fetchMenu = createAsyncThunk(
       }
       return response;
     } catch (error) {
-      rejectWithValue(error);
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -27,14 +27,14 @@ export const updateFood = createAsyncThunk(
 
       dispatch(update(food))
     } catch (error) {
-      rejectWithValue(error)
+      return rejectWithValue(error.message);
     }
   }
 
 )
 export const createMenu = createAsyncThunk(
   "menu/addMenu",
-  async function (foods, { rejectWithValue, dispatch }) {
+  async function ({foods,restaurantId}, { rejectWithValue, dispatch }) {
     let response;
     try {
       response = await createMenuAsync(foods);
@@ -44,21 +44,22 @@ export const createMenu = createAsyncThunk(
 
       dispatch(addMenu(response));
     } catch (error) {
-      rejectWithValue(error);
+      return rejectWithValue(error.message);
     }
   }
 );
 export const addFood = createAsyncThunk(
   "menu/addFood",
-  async function (food , {rejectWithValue, dispatch}){
+  async function ({food,restaurantId} , {rejectWithValue, dispatch}){
       try {
         let response = await  addFoodAsync(food)
         if(response?.status === 401 ){
           response = await addFoodAsync(food)
         }
-        dispatch(createFood(food))
+        dispatch(fetchMenu(restaurantId))
+        
       } catch (error) {
-        rejectWithValue(error)
+        return rejectWithValue(error.message);
       }
   }
 )

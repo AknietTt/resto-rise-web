@@ -1,6 +1,7 @@
 import axios from "axios";
-import { getCookieValue, refreshAccessToken } from "../utils/authUtils";
+import { getCookieValue } from "../utils/authUtils";
 import { host } from "../utils/constants";
+import { checkError } from "./constants";
 
 export const getAllRestaurantsAsync = async (userId) => {
   let response;
@@ -17,13 +18,7 @@ export const getAllRestaurantsAsync = async (userId) => {
 
     return response.data;
   } catch (error) {
-    if (error.response && error.response.status === 401) {
-      const refreshTokenSuccess = await refreshAccessToken();
-      if (refreshTokenSuccess) {
-        return error.response;
-      }
-    }
-    throw error;
+    return checkError(error);
   }
 };
 
@@ -41,13 +36,7 @@ export const RestaurantsDeleteAsync = async (restaurantId) => {
     );
     return response;
   } catch (error) {
-    if (error.response && error.response.status === 401) {
-      const refreshTokenSuccess = await refreshAccessToken();
-      if (refreshTokenSuccess) {
-        return error.response;
-      }
-    }
-    throw error;
+    return checkError(error);
   }
 };
 
@@ -68,13 +57,7 @@ export const createRestaurantAsync = async (restaurant) => {
     );
     return response.data;
   } catch (error) {
-    if (error.response && error.response.status === 401) {
-      const refreshTokenSuccess = await refreshAccessToken();
-      if (refreshTokenSuccess) {
-        return error.response;
-      }
-    }
-    throw error;
+    return checkError(error);
   }
 };
 
@@ -95,12 +78,6 @@ export const editRestaurantAsync = async (restaurant) => {
     );
     return response.data;
   } catch (error) {
-    if (error.response && error.response.status === 401) {
-      const refreshTokenSuccess = await refreshAccessToken();
-      if (refreshTokenSuccess) {
-        return error.response;
-      }
-    }
-    throw error;
+    return checkError(error);
   }
 };
